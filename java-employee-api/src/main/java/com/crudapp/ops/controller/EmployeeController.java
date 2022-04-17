@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.crudapp.ops.model.Employeerec;
 import com.crudapp.ops.repository.EmployeeRepository;
 
+import org.springframework.beans.factory.annotation.Value;
+
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -30,6 +32,15 @@ public class EmployeeController {
     @GetMapping("/list")
     public List<Employeerec> getAllEmployees() {
         return employeeRepository.findAll();
+    }
+
+    @Value("${environment}")
+    String retversion;
+
+
+    @GetMapping("/version")
+    public String version() {
+        return retversion;
     }
 
     @PostMapping("/create")
@@ -54,13 +65,13 @@ public class EmployeeController {
     }
 
     @PutMapping("/employee/{id}")
-    public ResponseEntity<Employeerec> updateTutorial(@PathVariable("id") long id, @RequestBody Employeerec employeerec) {
+    public ResponseEntity<Employeerec> updateEmployee(@PathVariable("id") long id, @RequestBody Employeerec employeerec) {
 	Optional<Employeerec> employeeData = employeeRepository.findById(id);
 	if (employeeData.isPresent()) {
 		Employeerec _employee = employeeData.get();
-		_employee.setEmployeeID(employee.getEmployeeID());
-		_employee.setEmployeeFirstName(employee.getEmployeeFirstName());
-		_employee.setEmployeeLastName(employee.getEmployeeLastName());
+		_employee.setEmployeeID(employeerec.getEmployeeID());
+		_employee.setEmployeeFirstName(employeerec.getEmployeeFirstName());
+		_employee.setEmployeeLastName(employeerec.getEmployeeLastName());
 		return new ResponseEntity<>(employeeRepository.save(_employee), HttpStatus.OK);
 	} else {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
