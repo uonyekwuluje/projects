@@ -20,6 +20,9 @@ import com.crudapp.ops.model.Employeerec;
 import com.crudapp.ops.repository.EmployeeRepository;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
+
 
 
 @CrossOrigin(origins = "http://localhost:8081")
@@ -35,12 +38,26 @@ public class EmployeeController {
     }
 
     @Value("${environment}")
+    String retenv;
+
+    @Value("${version}")
     String retversion;
 
 
     @GetMapping("/version")
     public String version() {
-        return retversion;
+        String jsonVersion = "{\"environment\":\"+retenv+\",\"version\":\"+retversion+\"}"; 
+        ObjectMapper mapper = new ObjectMapper();
+	// create a JSON object
+	ObjectNode JSONObject = mapper.createObjectNode();
+	JSONObject.put("environment", retenv);
+	JSONObject.put("version", retversion);
+        try {
+           String JSONString = mapper.writeValueAsString(JSONObject);
+            return JSONString;
+        } catch(Exception e) {
+      	    return ("Error "+e);
+	}
     }
 
     @PostMapping("/create")

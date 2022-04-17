@@ -36,6 +36,9 @@ OR
 java -Dspring.profiles.active=dev -jar target/ops-0.0.1-SNAPSHOT.jar
 
 
+# Test Version
+curl -s 'localhost:8082/api/version' | jq .
+
 # List Employees
 curl -s 'localhost:8080/api/list' | jq .
 

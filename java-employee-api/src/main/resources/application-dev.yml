@@ -19,3 +19,4 @@ spring:
 
 dbase_table: employee_table
 environment: development
+version: 1.0.0

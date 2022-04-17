@@ -28,3 +28,4 @@ logging:
 
 dbase_table: employee_table
 environment: base
+version: 1.0.1
