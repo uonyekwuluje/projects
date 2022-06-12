@@ -8,7 +8,7 @@ export DNS_NAME="<dns name>"
 export ZONE_ID="<zone id>"
 ```
 
-Create `.env.sh` file
+Create `.env.sh` file. This is excluded and never checked in
 ```
 #!/bin/bash
 cat <<EOF
@@ -30,6 +30,7 @@ terraform state pull
 ```
 
 ## Connect to new node
+Terraform apply will output the Public IP of the VM. You can SSH Directly
 ```
 ssh -i <ssh key> admin@<ip address>
 ```
