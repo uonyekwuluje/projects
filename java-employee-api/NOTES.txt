@@ -1,0 +1,161 @@
+
+# Create role
+------------------------
+CREATE ROLE appadmin;
+
+# Show Rolenames
+-----------------------
+SELECT rolname FROM pg_roles;
+
+# Show users
+-----------------------
+\du+
+
+# Create password
+-----------------------
+ALTER USER appadmin WITH PASSWORD 'password123';
+ALTER USER appadmin WITH SUPERUSER;
+ALTER ROLE appadmin WITH LOGIN;
+
+# Create Database
+-----------------------
+CREATE DATABASE employeedb;
+CREATE DATABASE employeedb-dev;
+CREATE DATABASE employeedb-prod;
+
+# List Databases
+-----------------------
+\l
+
+# Drop Database
+-----------------------
+DROP DATABASE employeedb;
+
+# Connect
+-----------------------
+postgres=# \c employeedb;
+
+# Create Table
+-----------------------
+CREATE TABLE employee_table(
+   id BIGINT PRIMARY KEY NOT NULL,
+   employee_id     CHAR(20) NOT NULL,
+   employee_fname  CHAR(25) NOT NULL,
+   employee_lname  CHAR(25) NOT NULL
+);
+
+# Alter Table
+-----------------------
+ALTER TABLE student_table ALTER COLUMN student_grade TYPE CHAR(25);
+
+# Drop Table
+-----------------------
+DROP TABLE employee_table;
+
+# Update Sequence
+-----------------------
+CREATE SEQUENCE hibernate_sequence START 1;
+
+
+# List Tables
+-------------------------
+\d
+\d employee_table;
+
+# Insert into Table
+-------------------------
+INSERT INTO employee_table (id,employee_id,employee_fname,employee_lname)
+VALUES (1,'empl-001', 'Tony', 'Parker');
+
+# Select
+-------------------------
+SELECT * FROM employee_table;
+
+# Update Table
+-------------------------
+UPDATE student_table SET student_fname = 'Ethean' WHERE student_regnum = 'stdsc-004';
+
+# Delete Query
+-------------------------
+DELETE FROM employee_table WHERE employee_id = 'empl-001';
+
+
+
+
+
+
+## Build Operations & Tasks 
+Build and run
+```
+mvn clean install
+```
+
+
+## Test Application
+```
+./mvnw spring-boot:run
+curl -s 'localhost:8080/create?empid=empl-001&empfirstname=Tony&emplastname=Parker&empage=34' | jq 
+```
+
+
+
+
+
+
+psql -U appadmin -h 192.168.1.117 -p 5432 employeedb
+psql (14.2 (Debian 14.2-1.pgdg110+1))
+Type "help" for help.
+
+employeedb=# \q
+
+
+
+curl http://192.168.1.119:30163/api/version
+
+
+
+
+# Get Version
+----------------------
+curl -s 'localhost:8082/api/version' | jq .
+
+
+
+# List Employees
+----------------------
+curl -s 'localhost:8080/api/list' | jq .
+
+# Create Employees
+---------------------
+curl -X POST http://localhost:8080/api/create -H 'Content-Type: application/json' -d '{"employeeID":"empl-001","employeeFirstName":"Mark", "employeeLastName":"Rafalo"}'
+
+
+# Update Employees
+---------------------
+curl -X PUT http://localhost:8080/api/employee/4 -H 'Content-Type: application/json' -d '{"employeeID":"empl-002","employeeFirstName":"Benedict", "employeeLastName":"Cumberbatch"}'
+
+
+# Search employee by ID
+-------------------------
+curl http://localhost:8080/api/employee/2
+
+
+# Delete Employee
+---------------------
+curl -X DELETE http://localhost:8080/api/employee/1
+
+
+
+
+
+
+
+export APP_ENV="dev"
+java -Dspring.profiles.active=${APP_ENV} -jar target/ops-0.0.1-SNAPSHOT.jar
+
+
+
+docker tag jdk18-mvn-image:latest augike101/jdk18-mvn-image:latest
+docker push augike101/jdk18-mvn-image:latest 
+docker run -ti jdk18-mvn-image bash
+

@@ -1,1 +1,7 @@
 **.class*
+**.terraform*
+**.terraform.lock.hcl*
+**terraform.tfstate*
+**.env.sh*
+**external-env.tf*
+**terraform.tfstate.backup*
